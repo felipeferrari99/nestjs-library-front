@@ -1,4 +1,6 @@
 import libraryAPI from "../axios/config";
+import axios from "axios";
+const url = import.meta.env.VITE_AXIOS_URL;
 
 export const loginRequest = async (username, password) => {
   try {
@@ -36,7 +38,7 @@ export const getUser = async (id) => {
 
 export const updateUser = async (id, email, password, description) => {
   try {
-    await libraryAPI.put(`/user/${id}`, {
+    await libraryAPI.patch(`/user/${id}`, {
       'email': email,
       'password': password,
       'description': description,
@@ -46,18 +48,28 @@ export const updateUser = async (id, email, password, description) => {
   }
 }
 
-export const changeImage = async (id, formData) => {
+export const changeImage = async (id, image) => {
   try {
-    const response = await libraryAPI.put(`/user/${id}/image`, formData);
-    return response.data
+    const formData = new FormData();
+    formData.append('file', image);
+
+    const response = await libraryAPI.post(`/user/${id}/image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
   } catch (error) {
     throw error;
   }
-}
+};
 
-export const alterFavorite = async (id) => {
+export const alterFavorite = async (id, userId) => {
   try {
-    await libraryAPI.put(`/books/${id}/favorite`);
+    await libraryAPI.patch(`/books/${id}/favorite`, {
+      'user_id': userId
+    });
   } catch (error) {
     console.log(error)
   }

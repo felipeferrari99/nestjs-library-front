@@ -25,10 +25,10 @@ const EditUser = () => {
         const token = localStorage.getItem('token');
         if (token) {
           const decodedToken = JSON.parse(atob(token.split('.')[1]));
-          setUserId(decodedToken.userId);
+          setUserId(decodedToken.id);
         }
         const response = await getUser(id);
-        setUser(response.user[0]);
+        setUser(response);
       } catch (error) {
         toast.error(`Error fetching user data: ${error.message}`);
       } finally {
@@ -42,7 +42,6 @@ const EditUser = () => {
   useEffect(() => {
     if (user && userId == id) {
       setEmail(user.email);
-      setPassword(user.password);
       setDescription(user.description);
     }
   }, [user]);
@@ -61,11 +60,8 @@ const EditUser = () => {
   const handleImageSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('image', image);
     try {
-      const response = await changeImage(id, formData);
+      const response = await changeImage(id, image);
       const { token } = response;
       localStorage.removeItem('token');
       localStorage.setItem('token', token);
@@ -110,7 +106,7 @@ const EditUser = () => {
             <FloatingLabel variant="filled" label="E-mail" name="email" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
           </div>
           <div className="mb-5">
-            <FloatingLabel variant="filled" label="Password" name="password" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} onFocus={() => setPassword('')}/>
+            <FloatingLabel variant="filled" label="Password" name="password" type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
           </div>
           <div className="mb-5">
             <FloatingLabel variant="filled" label="Description" name="description" type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)}/>

@@ -25,7 +25,7 @@ const EditAuthor = () => {
           setType(decodedToken.type);
         }
         const response = await getAuthor(id)
-        setAuthor(response.author[0]);
+        setAuthor(response);
       } catch (error) {
         toast.error(`Error fetching author data: ${error.response.data.message}`);
       } finally {
@@ -56,11 +56,8 @@ const EditAuthor = () => {
 
   const handleImageSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('image', image);
     try {
-      await changeImage(id, formData);
+      await changeImage(id, image);
       window.location.reload();
     } catch (error) {
       console.error('Error during author update:', error);

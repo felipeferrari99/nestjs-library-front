@@ -20,7 +20,15 @@ export const getAuthor = async (id) => {
 
 export const newAuthor = async (name, image, description) => {
     try {
-        const response = await libraryAPI.post(`/authors`, {name, image, description});
+        const formData = new FormData();
+        formData.append('name', name)
+        formData.append('file', image)
+        formData.append('description', description)
+        const response = await libraryAPI.post(`/authors`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        });
         return response.data
     } catch (error) {
         console.log(error);
@@ -38,14 +46,22 @@ export const updateAuthor = async (id, name, description) => {
     }
 }
 
-export const changeImage = async (id, formData) => {
+export const changeImage = async (id, image) => {
     try {
-        const response = await libraryAPI.put(`/authors/${id}/image`, formData);
-        return response.data
+      const formData = new FormData();
+      formData.append('file', image);
+  
+      const response = await libraryAPI.post(`/authors/${id}/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+  
+      return response.data;
     } catch (error) {
-        console.log(error);
+      throw error;
     }
-}
+  };
 
 export const deleteAuthor = async (id) => {
     try {

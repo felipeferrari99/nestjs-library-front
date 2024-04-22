@@ -25,7 +25,7 @@ export default function User() {
     const fetchData = async () => {
       if (token) {
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        setUserId(decodedToken.userId);
+        setUserId(decodedToken.id);
       }
       const data = await getUser(id);
       setUser(data);

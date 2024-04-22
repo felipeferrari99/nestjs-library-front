@@ -7,11 +7,17 @@ import { getMyRents, returnBook } from "../../requests/rents";
 const MyRents = () => {
   const [rents, setRents] = useState(null);
   const [statusFilter, setStatusFilter] = useState('active');
+  const [userId, setUserId] = useState('');
 
   const getRents = async () => {
     try {
-      const response = await getMyRents()
-      setRents(response);
+      const token = await localStorage.getItem("token");
+      if (token) {
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        setUserId(decodedToken.id);
+        const response = await getMyRents(decodedToken.id)
+        setRents(response);
+      }
     } catch (error) {
       toast.error(`Error getting rents: ${error.response.data.message}`);
     }
@@ -82,7 +88,7 @@ const MyRents = () => {
           {filteredRents.map((rent) => (
             <tr key={rent.id}>
               <td className="border md:px-4 md:py-2">{rent.id}</td>
-              <td className="border md:px-4 md:py-2">{rent.title.slice(0, 30)}</td>
+              <td className="border md:px-4 md:py-2">{rent.book.title.slice(0, 30)}</td>
               <td className="border md:px-4 md:py-2">{moment.utc(rent.date_rented).format('DD/MM/YYYY')}</td>
               <td className="border md:px-4 md:py-2">{moment.utc(rent.date_for_return).format('DD/MM/YYYY')}</td>
               <td className="border md:px-4 md:py-2">{rent.status}</td>

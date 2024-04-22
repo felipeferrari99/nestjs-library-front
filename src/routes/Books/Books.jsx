@@ -16,7 +16,6 @@ export default function Books() {
   const fetchData = async () => {
     try {
       const response = await getBooks(search)
-      console.log(response)
       setBooks(response);
       setTotalPages(Math.ceil(response.length / 3));
     } catch (error) {

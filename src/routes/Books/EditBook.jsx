@@ -29,7 +29,7 @@ const EditBook = () => {
           setType(decodedToken.type);
         }
         const response = await getBook(id);
-        setBook(response.book);
+        setBook(response);
       } catch (error) {
         toast.error(`Error fetching book data: ${error.message}`);
       } finally {
@@ -45,7 +45,7 @@ const EditBook = () => {
       setTitle(book.title);
       setReleaseDate(book.release_date);
       setQtyAvailable(book.qty_available);
-      setAuthor(book.authorName);
+      setAuthor(book.author.name);
       setDescription(book.description);
     }
   }, [book]);
@@ -64,11 +64,8 @@ const EditBook = () => {
   const handleImageSubmit = async (event) => {
     event.preventDefault();
     
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('image', image);
     try {
-      await changeImage(id, formData)
+      await changeImage(id, image)
       window.location.reload();
     } catch (error) {
       console.error('Error during book update:', error);

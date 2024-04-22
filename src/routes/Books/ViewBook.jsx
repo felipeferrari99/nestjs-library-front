@@ -44,6 +44,10 @@ export default function ViewBook() {
     }
   }
 
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
   const removeBook = async (id) => {
     try {
       await deleteBook(id);
@@ -63,13 +67,14 @@ export default function ViewBook() {
       }
       fetchData();
     } catch (error) {
+      console.log(error.response)
       toast.error(`Error deleting comment: ${error.response.data.message}`);
     }
   };
 
   const changeFavorite = async (id) => {
     try {
-      await alterFavorite(id);
+      await alterFavorite(id, userId);
       toast.success('Favorite book changed!');
       fetchData();
     } catch (error) {
@@ -88,7 +93,7 @@ export default function ViewBook() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await newComment(id, body, starRating)
+      await newComment(id, body, starRating, userId)
       toast.success(`Comment added!`);
       fetchData();
       setBody('');
@@ -97,10 +102,6 @@ export default function ViewBook() {
       toast.error(`Error adding comment: ${error.response.data.message}`);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
 
   const indexOfLastComment = currentPage * 3;
   const indexOfFirstComment = indexOfLastComment - 3;
@@ -226,9 +227,9 @@ export default function ViewBook() {
             ) : (
               currentComments.map((comment) => (
                 <div className="border rounded-md p-2" key={comment.id}>
-                  <Link to={`/user/${comment.user}`}>
+                  <Link to={`/user/${comment.user.id}`}>
                     <h4 className="block text-blue-500 hover:text-blue-700">
-                      {comment.username}
+                      {comment.user.username}
                     </h4>
                   </Link>
                   <Stars
@@ -240,7 +241,7 @@ export default function ViewBook() {
                     edit={false}
                   />
                   <p className="mb-2">{comment.body}</p>
-                  {userId == comment.user && (
+                  {userId == comment.user_id && (
                     <button
                       onClick={() => removeComment(comment.id)}
                       className="p-2 rounded-2xl max-w-xs bg-white text-gray-800 border border-white hover:bg-red-700 hover:text-white transition-colors duration-300"
