@@ -1,5 +1,4 @@
 import libraryAPI from "../axios/config";
-import axios from "axios";
 const url = import.meta.env.VITE_AXIOS_URL;
 
 export const loginRequest = async (username, password) => {
@@ -71,6 +70,6 @@ export const alterFavorite = async (id, userId) => {
       'user_id': userId
     });
   } catch (error) {
-    console.log(error)
+    throw error;
   }
 }

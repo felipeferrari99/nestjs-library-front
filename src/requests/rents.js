@@ -5,7 +5,7 @@ export const getBooks = async () => {
       const response = await libraryAPI.get("/available");
       return response.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 };
 
@@ -14,7 +14,7 @@ export const getAllRents = async () => {
       const response = await libraryAPI.get("/allRents");
       return response.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 };
 
@@ -23,7 +23,7 @@ export const getMyRents = async (userId) => {
       const response = await libraryAPI.get(`/myRents/${userId}`);
       return response.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 };
 

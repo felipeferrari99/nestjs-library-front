@@ -10,8 +10,8 @@ const Login = () => {
   const [, setLoginState] = useOutletContext();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false)
 
   const login = async (e) => {

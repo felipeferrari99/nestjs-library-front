@@ -9,7 +9,7 @@ const EditAuthor = () => {
   const [author, setAuthor] = useState(null);
   const { id } = useParams();
   const [type, setType] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState(null);
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);

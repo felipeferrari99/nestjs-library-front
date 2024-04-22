@@ -10,9 +10,9 @@ const EditUser = () => {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState('');
   const { id } = useParams();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [description, setDescription] = useState('');
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [description, setDescription] = useState(null);
   const [username, setUsername] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -10,7 +10,7 @@ const NewRent = () => {
   const [book, setBook] = useState(null);
   const { id } = useParams();
   const [userId, setUserId] = useState('');
-  const [days, setDays] = useState('');
+  const [days, setDays] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 

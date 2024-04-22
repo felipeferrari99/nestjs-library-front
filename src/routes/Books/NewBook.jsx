@@ -7,11 +7,11 @@ import Button from '../../components/Button';
 import { toast } from 'react-toastify';
 
 const NewBook = () => {
-  const [title, setTitle] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
+  const [title, setTitle] = useState(null);
+  const [releaseDate, setReleaseDate] = useState(null);
   const [image, setImage] = useState(null);
-  const [qtyAvailable, setQtyAvailable] = useState('');
-  const [author, setAuthor] = useState('');
+  const [qtyAvailable, setQtyAvailable] = useState();
+  const [author, setAuthor] = useState(null);
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
 

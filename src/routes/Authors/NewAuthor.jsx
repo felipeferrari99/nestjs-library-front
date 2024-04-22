@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { newAuthor } from '../../requests/authors';
 
 const NewAuthor = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(null);
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('');
   const navigate = useNavigate();

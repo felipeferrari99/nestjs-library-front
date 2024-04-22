@@ -5,7 +5,7 @@ export const getAuthors = async (search) => {
       const response = await libraryAPI.get("/authors", { params: { search } });
       return response.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 };
 
@@ -14,7 +14,7 @@ export const getAuthor = async (id) => {
       const response = await libraryAPI.get(`/authors/${id}`)
       return response.data
     } catch (error) {
-        console.log(error);
+      throw error;
     }
 }
 
@@ -31,7 +31,7 @@ export const newAuthor = async (name, image, description) => {
         });
         return response.data
     } catch (error) {
-        console.log(error);
+      throw error;
     }
 }
 
@@ -42,7 +42,7 @@ export const updateAuthor = async (id, name, description) => {
             'description': description,
         });
     } catch (error) {
-        console.log(error);
+      throw error;
     }
 }
 
@@ -68,6 +68,6 @@ export const deleteAuthor = async (id) => {
         const response = libraryAPI.delete(`/authors/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error)
+      throw error;
     }
 }

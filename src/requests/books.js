@@ -5,7 +5,7 @@ export const getBooks = async (search) => {
       const response = await libraryAPI.get("/books", { params: { search } });
       return response.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 };
 
@@ -14,27 +14,28 @@ export const getBook = async (id) => {
       const response = await libraryAPI.get(`/books/${id}`)
       return response.data
     } catch (error) {
-        console.log(error);
+      throw error;
     }
 }
 
-export const newBook = async (title, author, image, description, release_date, qty_available) => {
-    try {
-        const formData = new FormData();
-        formData.append('title', title)
-        formData.append('author', author)
-        formData.append('file', image);
-        formData.append('description', description)
-        formData.append('release_date', release_date)
-        formData.append('qty_available', qty_available)
-        const response = await libraryAPI.post(`/books`, formData, { 
+export const newBook = async (title, author, image, description, release_date, qty_available) => { 
+  try {
+        const response = await libraryAPI.post(`/books`, {
+          'title': title,
+          'authorName': author,
+          'file': image,
+          'description': description,
+          'release_date': release_date,
+          'qty_available': qty_available
+        }, { 
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
         });
         return response.data
     } catch (error) {
-        console.log(error);
+      console.log(error)
+        throw error;
     }
 }
 
@@ -42,13 +43,13 @@ export const updateBook = async (id, title, author, description, release_date, q
     try {
         await libraryAPI.put(`/books/${id}`, {
             'title': title,
-            'author': author,
+            'authorName': author,
             'description': description,
             'release_date': release_date,
             'qty_available': qty_available,
         });
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -74,6 +75,6 @@ export const deleteBook = async (id) => {
         const response = libraryAPI.delete(`/books/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error)
+      throw error;
     }
 }

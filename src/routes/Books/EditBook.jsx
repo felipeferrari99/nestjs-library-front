@@ -10,10 +10,10 @@ const EditBook = () => {
   const [book, setBook] = useState(null);
   const { id } = useParams();
   const [type, setType] = useState('');
-  const [title, setTitle] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
-  const [qtyAvailable, setQtyAvailable] = useState('');
-  const [author, setAuthor] = useState('');
+  const [title, setTitle] = useState(null);
+  const [releaseDate, setReleaseDate] = useState(null);
+  const [qtyAvailable, setQtyAvailable] = useState(null);
+  const [author, setAuthor] = useState(null);
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);
