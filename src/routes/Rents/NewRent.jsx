@@ -74,6 +74,7 @@ const NewRent = () => {
                 id="days"
                 className="rounded-lg"
                 value={days}
+                min={1}
                 onChange={(event) => setDays(event.target.value)}
               />
             </div>

@@ -18,19 +18,15 @@ export const getBook = async (id) => {
     }
 }
 
-export const newBook = async (title, author, image, description, release_date, qty_available) => { 
+export const newBook = async (title, author, description, release_date, qty_available) => { 
+
   try {
         const response = await libraryAPI.post(`/books`, {
           'title': title,
           'authorName': author,
-          'file': image,
           'description': description,
           'release_date': release_date,
-          'qty_available': qty_available
-        }, { 
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
+          'qty_available': Number(qty_available)
         });
         return response.data
     } catch (error) {
@@ -41,12 +37,12 @@ export const newBook = async (title, author, image, description, release_date, q
 
 export const updateBook = async (id, title, author, description, release_date, qty_available) => {
     try {
-        await libraryAPI.put(`/books/${id}`, {
+        await libraryAPI.patch(`/books/${id}`, {
             'title': title,
             'authorName': author,
             'description': description,
             'release_date': release_date,
-            'qty_available': qty_available,
+            'qty_available': Number(qty_available)
         });
     } catch (error) {
         throw error;

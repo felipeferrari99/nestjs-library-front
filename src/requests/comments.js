@@ -3,10 +3,10 @@ import libraryAPI from "../axios/config";
 export const newComment = async (id, body, starRating, userId) => {
     try {
         const response = await libraryAPI.post(`/books/${id}/comments`, {
-            'book_id': id,
-            'user_id': userId,
+            'book_id': Number(id),
+            'user_id': Number(userId),
             'body': body,
-            'rating': starRating,
+            'rating': Number(starRating),
         });
         return response.data
     } catch (error) {

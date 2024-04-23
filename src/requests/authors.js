@@ -18,17 +18,14 @@ export const getAuthor = async (id) => {
     }
 }
 
-export const newAuthor = async (name, image, description) => {
+export const newAuthor = async (name, description) => {
     try {
-        const formData = new FormData();
-        formData.append('name', name)
-        formData.append('file', image)
-        formData.append('description', description)
-        const response = await libraryAPI.post(`/authors`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-        });
+        const response = await libraryAPI.post(`/authors`, 
+        {
+          name, 
+          description
+        }
+        );
         return response.data
     } catch (error) {
       throw error;
@@ -37,7 +34,7 @@ export const newAuthor = async (name, image, description) => {
 
 export const updateAuthor = async (id, name, description) => {
     try {
-        await libraryAPI.put(`/authors/${id}`, {
+        await libraryAPI.patch(`/authors/${id}`, {
             'name': name,
             'description': description,
         });

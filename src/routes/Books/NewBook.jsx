@@ -2,17 +2,16 @@ import { newBook } from '../../requests/books';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import { FloatingLabel, FileInput, Label } from 'flowbite-react';
+import { FloatingLabel } from 'flowbite-react';
 import Button from '../../components/Button';
 import { toast } from 'react-toastify';
 
 const NewBook = () => {
   const [title, setTitle] = useState(null);
   const [releaseDate, setReleaseDate] = useState(null);
-  const [image, setImage] = useState(null);
   const [qtyAvailable, setQtyAvailable] = useState();
   const [author, setAuthor] = useState(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const NewBook = () => {
     const release_date = moment.utc(releaseDate).format('YYYY-MM-DD');
     const qty_available = qtyAvailable;
     try {
-      await newBook(title, author, image, description, release_date, qty_available)
+      await newBook(title, author, description, release_date, qty_available)
       toast.success('Book created successfully!');
       navigate('/books');
     } catch (error) {
@@ -53,12 +52,6 @@ const NewBook = () => {
         </div>
         <div className="mb-5">
           <FloatingLabel variant="filled" label="Author Name" name="author" type="text" id="author" onChange={(e) => setAuthor(e.target.value)}/>
-        </div>
-        <div className='mb-5'>
-          <div className="mb-2 block">
-              <Label className='text-white' htmlFor="image" value="Add Image" />
-          </div>
-          <FileInput id="image" onChange={(e) => setImage(e.target.files[0])} />
         </div>
         <div className="mb-5">
           <FloatingLabel variant="filled" label="Description" name="description" type="text" id="description" onChange={(e) => setDescription(e.target.value)}/>

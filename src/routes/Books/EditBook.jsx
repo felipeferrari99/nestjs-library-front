@@ -14,7 +14,7 @@ const EditBook = () => {
   const [releaseDate, setReleaseDate] = useState(null);
   const [qtyAvailable, setQtyAvailable] = useState(null);
   const [author, setAuthor] = useState(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);

@@ -32,8 +32,8 @@ export const newRent = async (id, days, userId) => {
         const date = new Date();
         date.setDate(date.getDate() + parseInt(days))
         const response = await libraryAPI.post(`/${id}/rent`, {
-            'book_id': id,
-            'user_id': userId,
+            'book_id': Number(id),
+            'user_id': Number(userId),
             'date_rented': (new Date()).toISOString().split('T')[0],
             'date_for_return': date.toISOString().split('T')[0]
         });

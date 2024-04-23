@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FloatingLabel, FileInput, Label } from 'flowbite-react';
+import { FloatingLabel } from 'flowbite-react';
 import Button from '../../components/Button';
 import { toast } from 'react-toastify';
 import { newAuthor } from '../../requests/authors';
 
 const NewAuthor = () => {
   const [name, setName] = useState(null);
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ const NewAuthor = () => {
     event.preventDefault();
   
     try {
-      await newAuthor(name, image, description)
+      await newAuthor(name, description)
       toast.success('Author created successfully!');
       navigate('/authors');
     } catch (error) {
@@ -44,12 +43,6 @@ const NewAuthor = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-5">
           <FloatingLabel variant="filled" label="Author Name" name="name" type="text" id="name" onChange={(e) => setName(e.target.value)}/>
-        </div>
-        <div className='mb-5'>
-          <div className="mb-2 block">
-              <Label className='text-white' htmlFor="image" value="Add Image" />
-          </div>
-            <FileInput id="image" onChange={(e) => setImage(e.target.files[0])} />
         </div>
         <div className="mb-5">
           <FloatingLabel variant="filled" label="Description" name="description" type="text" id="description" onChange={(e) => setDescription(e.target.value)}/>
