@@ -19,13 +19,27 @@ export const getAllRents = async () => {
 };
 
 export const getMyRents = async (userId) => {
-    try {
-      const response = await libraryAPI.get(`/myRents/${userId}`);
-      return response.data;
-    } catch (error) {
+  const query = `
+      query {
+          listMyRents(userId: ${userId}) {
+            id
+            date_rented
+            date_for_return
+            date_returned
+            status
+            book {
+              title
+            }
+          }
+      }
+  `;
+  try {
+      const response = await libraryAPI.post('', { query });
+      return response.data.data.listMyRents
+  } catch (error) {
       throw error;
-    }
-};
+  }
+}
 
 export const newRent = async (id, days, userId) => {
     try {

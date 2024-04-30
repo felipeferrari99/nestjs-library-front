@@ -1,25 +1,63 @@
 import libraryAPI from "../axios/config";
 
 export const getBooks = async (search) => {
-    try {
-      const response = await libraryAPI.get("/books", { params: { search } });
-      return response.data;
-    } catch (error) {
+  const query = `
+      query {
+          listBooks(search: "${search}") {
+              id
+              title
+              image
+              author_id
+              author {
+                  name
+              }
+          }
+      }
+  `;
+  try {
+      const response = await libraryAPI.post('', { query });
+      return response.data.data.listBooks
+  } catch (error) {
       throw error;
-    }
-};
+  }
+}
 
 export const getBook = async (id) => {
-    try {
-      const response = await libraryAPI.get(`/books/${id}`)
-      return response.data
-    } catch (error) {
+  const query = `
+      query {
+          showBook(id: ${id}) {
+              id
+              title
+              image
+              description
+              author_id
+              qty_available
+              release_date
+              author {
+                  name
+              }
+              comments{
+                id
+                body
+                rating
+                user_id
+                user {
+                  id
+                  username
+                }
+              }
+          }
+      }
+  `;
+  try {
+      const response = await libraryAPI.post('', { query });
+      return response.data.data.showBook
+  } catch (error) {
       throw error;
-    }
+  }
 }
 
 export const newBook = async (title, author, description, release_date, qty_available) => { 
-
   try {
         const response = await libraryAPI.post(`/books`, {
           'title': title,

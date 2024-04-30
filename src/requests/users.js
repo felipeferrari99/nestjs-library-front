@@ -1,17 +1,29 @@
 import libraryAPI from "../axios/config";
-const url = import.meta.env.VITE_AXIOS_URL;
 
 export const loginRequest = async (username, password) => {
   try {
-    const response = await libraryAPI.post('/login', {
-      'username': username,
-      'password': password,
-    })
-    return response.data
+    const query = `
+      mutation Login($username: String!, $password: String!) {
+        login(data: {
+          username: $username
+          password: $password
+        }) {
+          token
+        }
+      }
+    `;
+
+    const variables = {
+      username,
+      password,
+    };
+
+    const response = await libraryAPI.post('', { query, variables });
+    return response.data.data.login;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const registerRequest = async (username, email, password) => {
   try {
@@ -27,11 +39,29 @@ export const registerRequest = async (username, email, password) => {
 }
 
 export const getUser = async (id) => {
+  const query = `
+      query {
+          showUser(id: ${id}) {
+              id
+              email
+              username
+              image
+              description
+              favorite_book
+              book {
+                id
+                title
+                image
+              }
+          }
+      }
+  `;
   try {
-    const response = await libraryAPI.get(`/user/${id}`);
-    return response.data
+      const response = await libraryAPI.post('', { query });
+      console.log(response)
+      return response.data.data.showUser
   } catch (error) {
-    throw error;
+      throw error;
   }
 }
 
