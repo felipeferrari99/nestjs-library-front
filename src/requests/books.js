@@ -2,7 +2,7 @@ import libraryAPI from "../axios/config";
 
 export const getBooks = async (search) => {
   const query = `
-      query {
+      {
           listBooks(search: "${search}") {
               id
               title
@@ -24,7 +24,7 @@ export const getBooks = async (search) => {
 
 export const getBook = async (id) => {
   const query = `
-      query {
+      {
           showBook(id: ${id}) {
               id
               title
@@ -59,32 +59,60 @@ export const getBook = async (id) => {
 
 export const newBook = async (title, author, description, release_date, qty_available) => { 
   try {
-        const response = await libraryAPI.post(`/books`, {
-          'title': title,
-          'authorName': author,
-          'description': description,
-          'release_date': release_date,
-          'qty_available': Number(qty_available)
-        });
-        return response.data
-    } catch (error) {
-      console.log(error)
-        throw error;
-    }
+    const query = `
+      mutation newBook($title: String!, $authorName: String!, $description: String, $qty_available: Float!, $release_date: String!) {
+        createBook(data: {
+          title: $title
+          authorName: $authorName
+          description: $description
+          qty_available: $qty_available
+          release_date: $release_date
+        }) {
+          id
+        }
+      }
+    `;
+
+    const variables = {
+      title, 
+      authorName: author,
+      description, 
+      release_date, 
+      qty_available: parseFloat(qty_available)
+    };
+
+    const response = await libraryAPI.post('', { query, variables });
+    return response.data.data.createBook;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const updateBook = async (id, title, author, description, release_date, qty_available) => {
-    try {
-        await libraryAPI.patch(`/books/${id}`, {
-            'title': title,
-            'authorName': author,
-            'description': description,
-            'release_date': release_date,
-            'qty_available': Number(qty_available)
-        });
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const query = `
+      mutation UpdateBook($id: Float!, $input: UpdateBookInput!) {
+        updatePartialBook(id: $id, data: $input) {
+          id
+        }
+      }
+    `;
+
+    const variables = {
+      id: parseFloat(id),
+      input: {
+        title,
+        authorName: author,
+        description,
+        release_date,
+        qty_available: parseFloat(qty_available)
+      },
+    };
+
+    await libraryAPI.post('', { query, variables });
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const changeImage = async (id, image) => {
@@ -105,8 +133,13 @@ export const changeImage = async (id, image) => {
   };
 
 export const deleteBook = async (id) => {
+  const query = `
+      mutation {
+        deleteBook(id:${id})
+      }
+    `;
     try {
-        const response = libraryAPI.delete(`/books/${id}`);
+      const response = await libraryAPI.post('', { query });
         return response.data;
     } catch (error) {
       throw error;

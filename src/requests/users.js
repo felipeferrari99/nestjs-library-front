@@ -3,7 +3,7 @@ import libraryAPI from "../axios/config";
 export const loginRequest = async (username, password) => {
   try {
     const query = `
-      mutation Login($username: String!, $password: String!) {
+      mutation login($username: String!, $password: String!) {
         login(data: {
           username: $username
           password: $password
@@ -27,20 +27,34 @@ export const loginRequest = async (username, password) => {
 
 export const registerRequest = async (username, email, password) => {
   try {
-    const response = await libraryAPI.post('/register', {
-      'username': username,
-      'email': email,
-      'password': password,
-    })
-    return response.data
+    const query = `
+      mutation register($username: String!, $email: String!, $password: String!) {
+        createUser(data: {
+          username: $username
+          email: $email
+          password: $password
+        }) {
+          token
+        }
+      }
+    `;
+
+    const variables = {
+      username,
+      email,
+      password,
+    };
+
+    const response = await libraryAPI.post('', { query, variables });
+    return response.data.data.createUser;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const getUser = async (id) => {
   const query = `
-      query {
+      {
           showUser(id: ${id}) {
               id
               email
@@ -58,7 +72,6 @@ export const getUser = async (id) => {
   `;
   try {
       const response = await libraryAPI.post('', { query });
-      console.log(response)
       return response.data.data.showUser
   } catch (error) {
       throw error;
@@ -67,15 +80,28 @@ export const getUser = async (id) => {
 
 export const updateUser = async (id, email, password, description) => {
   try {
-    await libraryAPI.patch(`/user/${id}`, {
-      'email': email,
-      'password': password,
-      'description': description,
-    });
+    const query = `
+      mutation UpdateUser($id: Float!, $input: UpdateUserInput!) {
+        updatePartialUser(id: $id, data: $input) {
+          id
+        }
+      }
+    `;
+
+    const variables = {
+      id: parseFloat(id),
+      input: {
+        email,
+        password,
+        description,
+      },
+    };
+
+    await libraryAPI.post('', { query, variables });
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const changeImage = async (id, image) => {
   try {
@@ -96,10 +122,25 @@ export const changeImage = async (id, image) => {
 
 export const alterFavorite = async (id, userId) => {
   try {
-    await libraryAPI.patch(`/books/${id}/favorite`, {
-      'user_id': userId
-    });
+    const idFloat = parseFloat(id);
+    const userIdFloat = parseFloat(userId);
+
+    const query = `
+      mutation UpdateFavorite($id: Float!, $userId: Float!) {
+        updateFavorite(id: $id, user_id: $userId) {
+          id
+        }
+      }
+    `;
+
+    const variables = {
+      id: idFloat,
+      userId: userIdFloat,
+    };
+
+    const response = await libraryAPI.post('', { query, variables });
+    return response.data;
   } catch (error) {
     throw error;
   }
-}
+};

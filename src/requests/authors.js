@@ -2,7 +2,7 @@ import libraryAPI from "../axios/config";
 
 export const getAuthors = async (search) => {
   const query = `
-      query {
+      {
           listAuthors(search: "${search}") {
               id
               name
@@ -20,7 +20,7 @@ export const getAuthors = async (search) => {
 
 export const getAuthor = async (id) => {
   const query = `
-      query {
+      {
           showAuthor(id: ${id}) {
               id
               name
@@ -43,28 +43,52 @@ export const getAuthor = async (id) => {
 }
 
 export const newAuthor = async (name, description) => {
-    try {
-        const response = await libraryAPI.post(`/authors`, 
-        {
-          name, 
-          description
+  try {
+    const query = `
+      mutation newAuthor($name: String!, $description: String) {
+        createAuthor(data: {
+          name: $name
+          description: $description
+        }) {
+          id
         }
-        );
-        return response.data
-    } catch (error) {
-      throw error;
-    }
+      }
+    `;
+
+    const variables = {
+      name, 
+      description, 
+    };
+
+    const response = await libraryAPI.post('', { query, variables });
+    return response.data.data.createAuthor;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const updateAuthor = async (id, name, description) => {
-    try {
-        await libraryAPI.patch(`/authors/${id}`, {
-            'name': name,
-            'description': description,
-        });
-    } catch (error) {
-      throw error;
-    }
+  try {
+    const query = `
+      mutation UpdateAuthor($id: Float!, $input: UpdateAuthorInput!) {
+        updatePartialAuthor(id: $id, data: $input) {
+          id
+        }
+      }
+    `;
+
+    const variables = {
+      id: parseFloat(id),
+      input: {
+        name,
+        description
+      },
+    };
+
+    await libraryAPI.post('', { query, variables });
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const changeImage = async (id, image) => {
@@ -84,11 +108,16 @@ export const changeImage = async (id, image) => {
     }
   };
 
-export const deleteAuthor = async (id) => {
-    try {
-        const response = libraryAPI.delete(`/authors/${id}`);
-        return response.data;
-    } catch (error) {
-      throw error;
-    }
-}
+  export const deleteAuthor = async (id) => {
+    const query = `
+        mutation {
+          deleteAuthor(id:${id})
+        }
+      `;
+      try {
+        const response = await libraryAPI.post('', { query });
+          return response.data;
+      } catch (error) {
+        throw error;
+      }
+  }

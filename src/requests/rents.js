@@ -1,26 +1,56 @@
 import libraryAPI from "../axios/config";
 
 export const getBooks = async () => {
-    try {
-      const response = await libraryAPI.get("/available");
-      return response.data;
-    } catch (error) {
+  const query = `
+      {
+          listAvailable {
+              id
+              title
+              image
+              author_id
+              author {
+                  name
+              }
+          }
+      }
+  `;
+  try {
+      const response = await libraryAPI.post('', { query });
+      return response.data.data.listAvailable
+  } catch (error) {
       throw error;
-    }
-};
+  }
+}
 
 export const getAllRents = async () => {
-    try {
-      const response = await libraryAPI.get("/allRents");
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-};
+  const query = `
+  {
+      listAllRents {
+        id
+        date_rented
+        date_for_return
+        date_returned
+        status
+        user {
+          username
+        }
+        book {
+          title
+        }
+      }
+  }
+`;
+try {
+  const response = await libraryAPI.post('', { query });
+  return response.data.data.listAllRents
+} catch (error) {
+  throw error;
+}
+}
 
 export const getMyRents = async (userId) => {
   const query = `
-      query {
+      {
           listMyRents(userId: ${userId}) {
             id
             date_rented
