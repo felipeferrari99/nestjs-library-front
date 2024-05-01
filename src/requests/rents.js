@@ -72,26 +72,53 @@ export const getMyRents = async (userId) => {
 }
 
 export const newRent = async (id, days, userId) => {
-    try {
-        const date = new Date();
-        date.setDate(date.getDate() + parseInt(days))
-        const response = await libraryAPI.post(`/${id}/rent`, {
-            'book_id': Number(id),
-            'user_id': Number(userId),
-            'date_rented': (new Date()).toISOString().split('T')[0],
-            'date_for_return': date.toISOString().split('T')[0]
-        });
-        return response.data
-    } catch (error) {
-        throw error;
-    }
+  try {
+      const date = new Date();
+      date.setDate(date.getDate() + parseInt(days))
+      const query = `
+      mutation NewRent($book_id: Float!, $user_id: Float!, $date_rented: String!, $date_for_return: String!) {
+        createRent(data: {
+            book_id: $book_id
+            user_id: $user_id
+            date_rented: $date_rented
+            date_for_return: $date_for_return
+        }) {
+          id
+        }
+      }
+    `;
+    const variables = {
+        book_id: parseFloat(id),
+        user_id: parseFloat(userId),
+        date_rented: (new Date()).toISOString().split('T')[0],
+        date_for_return: date.toISOString().split('T')[0]
+    };
+    return await libraryAPI.post('', { query, variables });
+  } catch (error) {
+    console.log(error)
+      throw error;
+  }
 }
 
 export const returnBook = async (id) => {
-    try {
-        const response = libraryAPI.post(`/return/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
+  try {
+      const query = `
+        mutation ReturnBook($id: Float!) {
+          returnBook(id: $id) {
+            id
+          }
+        }
+      `;
+
+      const variables = {
+        id: parseInt(id),
+      };
+
+      const response = await libraryAPI.post('', { query, variables });
+      console.log('Return Book Response:', response.data);
+      return response.data.data.returnBook;
+  } catch (error) {
+      console.log('Return Book Error:', error);
+      throw error;
+  }
+};

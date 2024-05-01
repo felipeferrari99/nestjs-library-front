@@ -3,7 +3,7 @@ import libraryAPI from "../axios/config";
 export const newComment = async (id, body, starRating, userId) => {
     try {
       const query = `
-        mutation NewComment($bookId: Float!, $userId: Float!, $body: String!, $rating: Float!) {
+        mutation ($bookId: Float!, $userId: Float!, $body: String!, $rating: Float!) {
           createComment(data: {
             book_id: $bookId
             user_id: $userId
@@ -23,7 +23,7 @@ export const newComment = async (id, body, starRating, userId) => {
       };
   
       const response = await libraryAPI.post('', { query, variables });
-      return response.data.data.createComment;
+      return response.data
     } catch (error) {
       throw error;
     }
@@ -45,7 +45,7 @@ export const deleteComment = async (id, commentId) => {
         };
 
         const response = await libraryAPI.post('', { query, variables });
-        return response.data.data.deleteComment;
+        return response.data;
     } catch (error) {
         throw error;
     }
