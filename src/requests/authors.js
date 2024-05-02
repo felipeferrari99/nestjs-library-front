@@ -1,3 +1,4 @@
+import axios from "axios";
 import libraryAPI from "../axios/config";
 
 export const getAuthors = async (search) => {
@@ -92,22 +93,22 @@ export const updateAuthor = async (id, name, description) => {
 }
 
 export const changeImage = async (id, image) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', image);
-  
-      const response = await libraryAPI.post(`/authors/${id}/image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-  
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const formData = new FormData();
+    formData.append('id', id)
+    formData.append('file', image);
+    formData.append('origin', 'author')
 
+    const response = await axios.post('http://localhost:3000/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
   export const deleteAuthor = async (id) => {
     const query = `
         mutation {

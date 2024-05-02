@@ -1,3 +1,4 @@
+import axios from "axios";
 import libraryAPI from "../axios/config";
 
 export const getBooks = async (search) => {
@@ -116,21 +117,22 @@ export const updateBook = async (id, title, author, description, release_date, q
 }
 
 export const changeImage = async (id, image) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', image);
-  
-      const response = await libraryAPI.post(`/books/${id}/image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-  
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const formData = new FormData();
+    formData.append('id', id)
+    formData.append('file', image);
+    formData.append('origin', 'book')
+
+    const response = await axios.post('http://localhost:3000/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const deleteBook = async (id) => {
   const query = `

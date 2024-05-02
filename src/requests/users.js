@@ -1,3 +1,4 @@
+import axios from "axios";
 import libraryAPI from "../axios/config";
 
 export const loginRequest = async (username, password) => {
@@ -106,14 +107,15 @@ export const updateUser = async (id, email, password, description) => {
 export const changeImage = async (id, image) => {
   try {
     const formData = new FormData();
+    formData.append('id', id)
     formData.append('file', image);
+    formData.append('origin', 'user')
 
-    const response = await libraryAPI.post(`/user/${id}/image`, formData, {
+    const response = await axios.post('http://localhost:3000/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
-
     return response.data;
   } catch (error) {
     throw error;
